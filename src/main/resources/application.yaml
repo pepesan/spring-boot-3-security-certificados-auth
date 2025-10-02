@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: spring-boot-3-security-certificados-auth
+server:
+  port: 8443
+  ssl:
+    enabled: true
+    key-store: classpath:server.p12
+    key-store-password: changeit
+    key-store-type: PKCS12
+    trust-store: classpath:ca.p12
+    trust-store-password: changeit
+    trust-store-type: PKCS12
+    # 'need' = exigir certificado cliente; 'want' = permitir sin cert pero usarlo si lo hay
+    client-auth: need
+
