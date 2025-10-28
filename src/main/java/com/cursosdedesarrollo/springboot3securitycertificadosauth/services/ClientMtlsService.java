@@ -11,6 +11,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.security.KeyStore;
 import java.security.SecureRandom;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class ClientMtlsService {
@@ -40,7 +42,12 @@ public class ClientMtlsService {
             // 3) SSLContext con KeyManagers (cliente) + TrustManagers (CA del server)
             SSLContext sslContext = SSLContext.getInstance("TLS");
             sslContext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), new SecureRandom());
-
+            SSLParameters params = sslContext.getDefaultSSLParameters();
+            // Posibles protocolos de seguridad permitidos
+            String protocolsCsv = "TLSv1.3,TLSv1.2";
+            List<String> protocols = Arrays.asList(protocolsCsv.split(","));
+            // Aplicar TLSv1.3
+            params.setProtocols(protocols.toArray(new String[0]));
             // 4) HttpClient con ese SSLContext
             this.httpClient = HttpClient.newBuilder()
                     .sslContext(sslContext)
